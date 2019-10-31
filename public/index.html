@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>JUGOS</title>
+     
+        <!-- Ícono para la página web. -->
+        <link rel="icon" sizes="32x32" href="favicon.ico">
+     
+        <!-- Color de la barra de navegación de Chrome. -->
+        <meta name="theme-color" content="#ffcb2d">
+     
+        <!-- Configuración de la Web App Chrome y Microsoft Store. -->
+        <link rel="manifest" href="manifest.json">
+     
+        <!-- Configuración para del acceso directo en Windows Edge/IE -->
+        <!-- Icono -->
+        <meta name="msapplication-TileImage" content="icono.png">
+        <!-- Color de tile. -->
+        <meta name="msapplication-TileColor" content="#4fc3f7">
+     
+        <!-- Configuración para Web Clip en Safari. -->
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="apple-touch-icon" sizes="2048x2048" href="icono.png">
+        <link rel="apple-touch-startup-image" sizes="2048x2048" href="icono.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+     
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="estilos.css">
+        <script type="module" src="lib/registraServiceWorker.js"></script>
+        <script src="lib/polycustom.js"></script>
+        <script type="module" src="mi-footer.js"></script>
+      </head>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 1; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #9c2035; text-transform: uppercase; text-decoration: none; color: white; padding: 3px; border-radius: 4px; }
+	 
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head> <center>
+  <body>
+      
+        <form id="vista">
+           <header>
+    <div id="message">
+	
+	
+         <h1>Jugos</h1>
+            
+        <a href="jugoNuevo.html">Agregar&hellip;</a>
+				<center><progress max="100">Cargando…</progress></center>
+
+		 <ul id="ul">
+       </ul>
+      </header>
+
+      
+      <script src="/__/firebase/7.2.0/firebase-app.js"></script>
+      <script src="/__/firebase/7.2.0/firebase-firestore.js"></script>
+      <script src="/__/firebase/init.js"></script>
+      <script type="module">
+        import { error, url, cod } from "./lib/util.js";
+        const firestore = firebase.firestore();
+        firestore.enablePersistence()
+          .catch(error)
+          .then(consulta);
+        function consulta() {
+          firebase.firestore().collection("JUGO").onSnapshot(
+            querySnapshot => {
+              ul.innerHTML = "";
+              querySnapshot.forEach(doc => {
+                const modelo = doc.data();
+                ul.innerHTML += /*html*/
+                  `<li>
+                    <a href="jugo.html?id=${url(doc.id)}">
+                      ${cod(modelo.PASA_NOMBRE)}
+                      ${cod(modelo.PASA_JUGO)}
+                      ${cod(modelo.PASA_CANTIDAD)}
+                    </a>
+                  </li>`;
+              });
+            },
+            error);
+        }
+      </script>
+
+    </div>
+    <footer><center>
+Derechos Reservados &copy; 2019 Jose Alejandro Ortiz Hernandez  IC-51</center>
+</footer>
+  </body>
+</center>
+</html>

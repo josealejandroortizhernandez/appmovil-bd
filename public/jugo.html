@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+     <meta charset="utf-8">
+    <title>JUGOS</title>
+	<script type="module" src="lib/registraServiceWorker.js"></script>
+    <link rel="icon" sizes="32x32" href="favicon.ico">
+    <meta name="theme-color" content="#ffcb2d">
+    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="estilos.css">
+    <script type="module" src="lib/registraServiceWorker.js"></script>
+    <script src="lib/polycustom.js"></script>
+    <script type="module" src="mi-footer.js"></script>
+      </head>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 1; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #9c2035; text-transform: uppercase; text-decoration: none; color: white; padding: 3px; border-radius: 4px; }
+	 
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head> <center>
+  <body>
+        <form id="vista">
+            <header>
+                <div id="message">
+				
+						 <h1>Jugo</h1>
+                        <h1><output id="título"><progress max="100">Cargando…</progress></h1>
+
+                        <p>
+						
+
+						Tu nombre: <input id="nombre" type="text" placeholder="Nombre" value="" required><br>
+						Tu Jugo: <input id="jugo" type="text" placeholder="Jugo" value="" required><br>
+						cantidad de Jugos : <input id="cantidad" type="text" placeholder="Cantidad" value="" size="2" maxlength="4" required ><br>
+                        <br>
+                        <button type="submit">Guardar</button>
+                        <button id="eliminar" type="button">Eliminar</button>
+                        <br><br>
+                        <a href="index.html">Cancelar</a>
+						
+             </header>
+            </form>
+            <script src="/__/firebase/7.2.0/firebase-app.js"></script>
+            <script src="/__/firebase/7.2.0/firebase-firestore.js"></script>
+            <script src="/__/firebase/init.js"></script>
+            <script type="module">
+              import { error } from "./lib/util.js";
+              const parametros = new URLSearchParams(location.search);
+              const id = parametros.get("id");
+              const firestore = firebase.firestore();
+              firestore.enablePersistence()
+                .catch(error)
+                .then(busca);
+              async function busca() {
+                try {
+                  const doc = await firestore.collection("JUGO").doc(id).get();
+                  if (doc.exists) {
+                    const modelo = doc.data();
+
+                    document.title = modelo.PASA_NOMBRE;
+                    título.value = modelo.PASA_NOMBRE;
+                    nombre.value = modelo.PASA_NOMBRE;
+					jugo.value = modelo.PASA_JUGO;
+					cantidad.value = modelo.PASA_CANTIDAD;
+                    vista.addEventListener("submit", guarda);
+                    eliminar.addEventListener("click", elimina);
+                  } else {
+                    alert("Jugo no encontrado");
+                  }
+                } catch (e) {
+                  error(e)
+                }
+              }
+              async function guarda(evt) {
+                try {
+                  evt.preventDefault();
+                  const PASA_NOMBRE = nombre.value.trim();
+				  const PASA_JUGO = jugo.value.trim();
+                  const PASA_CANTIDAD = cantidad.value.trim();
+                  const modelo = { PASA_NOMBRE, PASA_JUGO, PASA_CANTIDAD };
+				  
+                  await firestore.collection("JUGO").doc(id).set(modelo);
+                  document.location = "index.html";
+                } catch (e) {
+                  error(e)
+                }
+              }
+              async function elimina() {
+                try {
+                  await firestore.collection("JUGO").doc(id).delete();
+                  document.location = "index.html";
+                } catch (e) 
+                {
+                  error(e)
+                }
+				 }
+    </script>	
+    </div>
+    <footer><center>
+Derechos Reservados &copy; 2019 Jose Alejandro Ortiz Hernandez  IC-51</center>
+</footer>
+  </body>
+</center>
+</html>
